@@ -1,0 +1,82 @@
+{
+  "name": "User Rights By Record",
+
+  "namespace": "Vanderbilt\\UserRightsByRecordExternalModule",
+
+  "authors": [
+    {
+      "name": "Ryan Moore",
+      "email": "datacore@vanderbilt.edu",
+      "institution": "Vanderbilt University Medical Center"
+    }
+  ],
+
+  "description": "Allows for both a person's user role and data access group to be based on record-by-record basis. This can be used in any REDCap project where the standard user rights and data access groups cannot easily define the needed user rights. The dashboard provided is a user interface to allow for easily assigning these specialized user rights.",
+
+  "permissions": [
+    "hook_every_page_before_render",
+    "select_data",
+    "redcap_module_link_check_display"
+  ],
+
+  "links": {
+    "project": [
+      {
+        "name": "Configure User Rights",
+        "icon": "report",
+        "url": "configure.php",
+        "access": "design"
+      }
+    ]
+  },
+
+  "no-auth-pages":[""],
+
+  "project-settings": [
+    {
+      "key": "user-project",
+      "name": "Project Storing User Rights and DAG Assignments",
+      "type":"project-id",
+      "repeatable": false
+    },
+    {
+      "key": "access-field",
+      "name": "Field that Stores User Access Information",
+      "type":"text",
+      "repeatable": false
+    },
+    {
+      "key": "project-field",
+      "name": "Field that Stores Project for Access Rights",
+      "type":"text",
+      "repeatable": false
+    },
+    {
+      "key": "user-field",
+      "name": "Field that Stores User Name to Apply Rights",
+      "type":"text",
+      "repeatable": false
+    },
+    {
+      "key": "dag-field",
+      "name": "Field that Stores DAG Assignments",
+      "type":"text",
+      "repeatable": false
+    },
+    {
+      "key": "group-field",
+      "name": "Field that Identifies User as Part of Custom Group",
+      "type":"text",
+      "repeatable": false
+    }
+  ],
+
+  "system-settings": [
+  ],
+  "compatibility": {
+    "php-version-min": "5.5.0",
+    "php-version-max": "",
+    "redcap-version-min": "8.0.0",
+    "redcap-version-max": ""
+  }
+}

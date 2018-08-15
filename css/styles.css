@@ -1,0 +1,112 @@
+.form-signin {
+	max-width: 600px;
+	margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+.form-signin .checkbox {
+	font-weight: normal;
+}
+.form-signin .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}
+.form-signin .form-control:focus {
+	z-index: 2;
+}
+.form-signin input[type="text"] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.header {
+	text-align: center;
+	margin-bottom: 20px;
+    margin-top:25px;
+    display:inline-block;
+    width:100%;
+}
+.header h2 {
+	font-size: 28px;
+	color: #0c74a9;
+    margin:auto;
+    width:350px;
+    border-bottom: 2px solid #aaa;
+}
+
+.title {
+	padding: 40px 15px;
+	text-align: center;
+}
+
+.errorText {
+	padding: 10px 15px;
+	text-align: center;
+	font-weight: bold;
+	color: red;
+}
+
+.windows {
+	width: 95%;
+	border-top:1px solid #333;
+	border-right:1px solid #333;
+	border-collapse:collapse;
+}
+.windows th, .windows td {
+	color:#000;
+	border-bottom:1px solid #333;
+	border-left:1px solid #333;
+    border-right:1px solid #333;
+    border-top:1px solid #333;
+	padding: .5em 1em;
+	text-align:center;
+}
+.windows th {
+	background-color: #e5e5e5;
+	font-weight: bold;
+}
+
+.text_description {
+    text-align: center;
+    font-size:18px;
+    font-weight: lighter;
+}
+
+.submit_div {
+    margin-top:20px;
+    padding:5px;
+}
+
+.consent_input {
+    margin-top:20px;
+    margin-bottom:15px;
+}
+
+body {
+    background-color: #e5e5e5;
+}
+
+.francisDialog { display:none;padding:15px 15px 10px !important;line-height:1.4em !important; }
+/** Adjust jQuery UI button style **/
+.ui-button-text-only .ui-button-text { padding:0.1em 0.3em; }
+
+th {
+    font-weight: bold !important;
+    background-color: #1c94c4;
+}
+td a {
+    text-decoration: underline !important;
+    font-size: 16px !important;
+}
+
+.dagHeader {
+	background-color:#CE8483;
+}
