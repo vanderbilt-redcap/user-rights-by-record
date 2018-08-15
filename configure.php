@@ -409,7 +409,6 @@ function generatePrefill($data,$dags) {
 		<?php
             $tableHTML = "";
             if (!empty($recordList)) {
-                //TODO Need to specify the selected table number instead of just using '1'
                 /*if (!empty($customRights[1]['record'])) {
 					$recordList = array_unique(array_merge($customRights[1]['record'], $recordList));
 				}*/
