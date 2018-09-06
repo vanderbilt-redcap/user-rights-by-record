@@ -238,7 +238,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 			WHERE project_id=$project_id
 			AND role_id=$role_id";
 		//echo "$sql<br/>";
-		$roleForms = db_result(db_query($sql),0);
+		$roleForms = db_result($this->query($sql),0);
 		$roleForms = ltrim($roleForms,"[");
 		$roleForms = rtrim($roleForms,"]");
 		$formArray = array();
@@ -340,7 +340,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 				FROM redcap_data
 				WHERE project_id=$project_id";
 		//echo "$sql<br/>";
-		$highestRecord = db_result(db_query($sql),0);
+		$highestRecord = db_result($this->query($sql),0);
 		$highestRecord++;
 		return $highestRecord;
 	}
@@ -355,7 +355,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 				AND d2.record='$record_id'
 				AND d.field_name LIKE '%_complete'";
 		//echo "$sql<br/>";
-		$result = db_query($sql);
+		$result = $this->query($sql);
 		while ($row = db_fetch_assoc($result)) {
 			$returnArray[$row['event_id']][$row['form_name']][] = $row['value'];
 		}
@@ -376,7 +376,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		JOIN redcap_user_information d2
 			ON d.username = d2.username
 		WHERE d.project_id=$project_id";
-		$result = db_query($sql);
+		$result = $this->query($sql);
 		while ($row = db_fetch_assoc($result)) {
 			$userlist[$row['username']] = $row['name'];
 		}
