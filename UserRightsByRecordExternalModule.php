@@ -57,7 +57,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                     $completeFields = array();
                     $formsByEvent = $Proj->eventsForms;
                     $longitudinal = $Proj->longitudinal;
-                    $dashboard = \RecordDashboard::getRecordDashboardSettings();
+                    $dashboard = $this->getRecordDashboardSettings();
                     $th_span1 = $th_span2 = '';
                     $th_width = 'width:35px;';
                     if ($dashboard['orientation'] == 'V') {
@@ -147,7 +147,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                         if (empty($recordRights) && ($user_rights['group_id'] != $groupID && $user_rights['group_id'] !== "") && !in_array($groupID, $dagAssigns)) continue;
 
                         $this_row = \RCView::td(array('style' => 'font-size:12px;'),
-                            \RCView::a(array('href' => APP_PATH_WEBROOT . "DataEntry/record_home.php?pid=$project_id&arm=" . \RecordDashboard::getFirstArmRecord($recordID, $recordsPerArm) . "&id=" . removeDDEending($recordID), 'style' => 'text-decoration:underline;font-size:13px;'), removeDDEending($recordID)) .
+                            \RCView::a(array('href' => APP_PATH_WEBROOT . "DataEntry/record_home.php?pid=$project_id&arm=" . $this->getFirstArmRecord($recordID, $recordsPerArm) . "&id=" . removeDDEending($recordID), 'style' => 'text-decoration:underline;font-size:13px;'), removeDDEending($recordID)) .
                             // Display custom record label or secondary unique field (if applicable)
                             (isset($extra_record_labels[$recordID]) ? '&nbsp;&nbsp;' . $extra_record_labels[$recordID] : '')
                         );
@@ -382,4 +382,39 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		}
 		return $userlist;
 	}
+
+    // Return array of settings for Custom Record Status Dashboard using the rd_id
+    private static function getRecordDashboardSettings($rd_id=null)
+    {
+        global $lang, $Proj;
+        // Validate rd_id
+        $rd_id = (int)$rd_id;
+        // Set default dashboard settings
+        $dashboard = getTableColumns('redcap_record_dashboards');
+        // If we're showing the default dashboard, then return default array
+        if (empty($rd_id)) return $dashboard;
+        // Get the dashboard
+        $sql = "select * from redcap_record_dashboards where rd_id = $rd_id and project_id = ".PROJECT_ID;
+        $q = db_query($sql);
+        if ($q && db_num_rows($q)) {
+            // Overlay values from table
+            $dashboard = db_fetch_assoc($q);
+        }
+        // Always force group_by event if classic project
+        if (!$Proj->longitudinal) {
+            $dashboard['group_by'] = 'event';
+            $dashboard['sort_event_id'] = $Proj->firstEventId;
+        }
+        return $dashboard;
+    }
+
+    // Return first arm that a given record exists in
+    private static function getFirstArmRecord($this_record, $recordsPerArm)
+    {
+        // Loop through arms till we find it. If not found, default to arm 1.
+        foreach ($recordsPerArm as $arm=>$records) {
+            if (isset($records[$this_record])) return $arm;
+        }
+        return '1';
+    }
 }
