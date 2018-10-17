@@ -328,11 +328,12 @@ function drawRightsTables($dagList,$roleList,$userList,$hiddenFields,$destinatio
 function getUserList($project_id) {
     global $module;
 	$userlist = array();
-	$sql = "SELECT d2.username,CONCAT(d2.user_firstname, ' ', d2.user_lastname) as name
+	$sql = "SELECT d2.username,CONCAT(d2.user_lastname, ', ', d2.user_firstname) as name
 		FROM redcap_user_rights d
 		JOIN redcap_user_information d2
 			ON d.username = d2.username
-		WHERE d.project_id=$project_id";
+		WHERE d.project_id=$project_id
+		ORDER BY name";
 	$result = $module->query($sql);
 	while ($row = db_fetch_assoc($result)) {
 		$userlist[$row['username']] = $row['name'];
@@ -345,7 +346,8 @@ function getDAGList($project_id) {
 	$dagList = array();
 	$sql = "SELECT group_id, group_name
 		FROM redcap_data_access_groups
-		WHERE project_id=$project_id";
+		WHERE project_id=$project_id
+		ORDER BY group_name";
 	$result = $module->query($sql);
 	while ($row = db_fetch_assoc($result)) {
 		$dagList[$row['group_id']] = $row['group_name'];
