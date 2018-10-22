@@ -231,6 +231,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		}
 	}
 
+
 	private function getFormAccess($project_id,$role_id) {
 		$formAccess = array();
 		$sql = "SELECT data_entry
