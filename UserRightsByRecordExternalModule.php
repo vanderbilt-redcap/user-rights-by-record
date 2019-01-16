@@ -337,7 +337,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 	}
 
 	public function getAutoId($project_id) {
-		$sql = "SELECT MAX(record)
+		$sql = "SELECT MAX(CAST(record as UNSIGNED))
 				FROM redcap_data
 				WHERE project_id=$project_id";
 		//echo "$sql<br/>";
