@@ -103,7 +103,14 @@ if ($projectID != "") {
 	        $postArray[$index]['dag'] = $value;
         }*/
 
-        $dagAssigns = implode(",", $_POST['dagid']);
+        //$dagAssigns = implode(",", $_POST['dagid']);
+        $dagAssigns = array();
+        foreach ($_POST['dagid'] as $dagID) {
+            $dagName = $Proj->getUniqueGroupNames($dagID);
+            if ($dagName != "") {
+                $dagAssigns[$dagID] = $Proj->getUniqueGroupNames($dagID);
+            }
+        }
 
         foreach ($_POST['recordid'] as $index => $value) {
             foreach ($value as $key=>$subValue) {
@@ -132,7 +139,7 @@ if ($projectID != "") {
 				}
 			}
 			//$module->saveData($userProjectID, $recordID, $event_id, array($module->getProjectSetting("project-field") => $projectID, $module->getProjectSetting("user-field") => $userID, $module->getProjectSetting("group-field") => $groupAssign, $module->getProjectSetting("dag-field") => $dagAssigns));
-            \Records::saveData($userProjectID, 'array', [$recordID => [$event_id => array($module->getProjectSetting("project-field") => $projectID, $module->getProjectSetting("access-field") => $json_encoder, $module->getProjectSetting("user-field") => $userID, $module->getProjectSetting("group-field") => $groupAssign, $module->getProjectSetting("dag-field") => $dagAssigns)]],'overwrite');
+            \Records::saveData($userProjectID, 'array', [$recordID => [$event_id => array($module->getProjectSetting("project-field") => $projectID, $module->getProjectSetting("access-field") => $json_encoder, $module->getProjectSetting("user-field") => $userID, $module->getProjectSetting("group-field") => $groupAssign, $module->getProjectSetting("dag-field") => json_encode($dagAssigns))]],'overwrite');
 		}
 		if ($groupAssign != "") {
 			foreach ($usersByGroup[$groupAssign] as $user) {
@@ -154,7 +161,7 @@ if ($projectID != "") {
 
 		foreach ($data as $recordID => $recordData) {
 		    $customRights = json_decode($recordData[$event_id][$module->getProjectSetting("access-field")],true);
-			$dagAssigns = explode(",",$recordData[$event_id][$module->getProjectSetting("dag-field")]);
+			$dagAssigns = $recordData[$event_id][$module->getProjectSetting("dag-field")];
         }
 
 		//$customRights = json_decode($data[1][$event_id][$module->getProjectSetting("access-field")], true);
@@ -210,7 +217,7 @@ if ($projectID != "") {
 			$postGroupData = \REDCap::getData($userProjectID, 'array', "", array(), $event_id, array(), false, false, false, "([" . $module->getProjectSetting('project-field') . "] = '$projectID' and [" . $module->getProjectSetting('group-field') . "] = '".db_real_escape_string($_POST['select_group'])."')");
 			foreach ($postGroupData as $recordID => $recordData) {
 				$customRights = json_decode($recordData[$event_id][$module->getProjectSetting("access-field")],true);
-				$dagAssigns = explode(",",$recordData[$event_id][$module->getProjectSetting("dag-field")]);
+				$dagAssigns = $recordData[$event_id][$module->getProjectSetting("dag-field")];
 				$usersGroup[$recordData[$event_id][$module->getProjectSetting("user-field")]] = $recordData[$event_id][$module->getProjectSetting("user-field")];
 			}
         }
@@ -399,7 +406,15 @@ function generatePrefill($data,$dags) {
 		    $returnString .= "$('input[id^=\"recordid_'+rowCount+'\"][value=\"".$recordID."\"]').prop('checked',true);";
         }
 	}
-	foreach ($dags as $dagIndex => $dagID) {
+	$dagFixed = array();
+
+	if (json_decode($dags) !== null) {
+	    $dagFixed = array_keys(json_decode($dags,true));
+    }
+    else {
+        $dagFixed = explode(",",$dags);
+    }
+	foreach ($dagFixed as $dagIndex => $dagID) {
 		$returnString .= "$('input[id^=\"dagid_$dagID\"][value=\"".$dagID."\"]').prop('checked',true);";
 	}
 	return $returnString;

@@ -273,7 +273,12 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 	public function processDAGs($dagAssigns) {
 		$dagArray = array();
 		if ($dagAssigns != "") {
-			$dagArray = explode(",", $dagAssigns);
+		    if (json_decode($dagAssigns) !== null) {
+		        $dagArray = array_keys(json_decode($dagAssigns,true));
+            }
+            else {
+                $dagArray = explode(",", $dagAssigns);
+            }
 		}
 		return $dagArray;
 	}
