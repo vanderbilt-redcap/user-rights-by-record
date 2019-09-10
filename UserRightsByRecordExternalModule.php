@@ -48,7 +48,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                     if (in_array($dagID, $dagAssigns)) {
                         $user_rights['group_id'] = $dagID;
                     }
-                    if (($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0" || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
+                    if (($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && $customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0" || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
                         echo "<script>window.location = '" . $redcapDashboardURL . "';</script>";
                     }
                 } elseif ($actual_link == $redcapDashboardURL) {
@@ -234,10 +234,11 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 
 	private function getFormAccess($project_id,$role_id) {
 		$formAccess = array();
+		if (!is_numeric($role_id) || !is_numeric($role_id)) return $formAccess;
 		$sql = "SELECT data_entry
 			FROM redcap_user_roles
-			WHERE project_id=$project_id
-			AND role_id=$role_id";
+			WHERE project_id=".$project_id."
+			AND role_id=".$role_id;
 		//echo "$sql<br/>";
 		$roleForms = db_result($this->query($sql),0);
 		$roleForms = ltrim($roleForms,"[");
