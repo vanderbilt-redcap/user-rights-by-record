@@ -1,3 +1,3 @@
 ##User Rights by Record Documentation
 ###Required REDCap project
-This external module requires a REDCap project be created to store custom user rights settings on a per user basis. A basic data dictionary for this can be downloaded <a href='https://www.w3schools.com/jsref/event_onclick.asp' download>here</a>. For further explanation of the
+This external module requires a REDCap project be created to store custom user rights settings on a per user basis. A basic data dictionary for this can be downloaded <a href='?prefix=vanderbilt_userrightsbyrecord&page=UserRightsModuleSettings_DataDictionary.csv' download='UserRightsModuleSettings_DataDictionary.csv'>here</a>. For further explanation of the
