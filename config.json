@@ -34,6 +34,11 @@
 
   "project-settings": [
     {
+      "key": "default-dd",
+      "name": "This external module requires a REDCap project be created to store custom user rights settings on a per user basis. A basic data dictionary for this can be downloaded <a href='https://cdn.jsdelivr.net/gh/vanderbilt-redcap/user-rights-by-record/includes/UserRightsModuleSettings_DataDictionary.csv' download='UserRightsModuleSettings_DataDictionary.csv'>here</a>. For further explanation of the project settings, see module documentation.",
+      "type": "descriptive"
+    },
+    {
       "key": "user-project",
       "name": "Project Storing User Rights and DAG Assignments",
       "type":"project-id",
