@@ -15,9 +15,9 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 	function hook_every_page_before_render($project_id) {
 		if ($project_id != "") {
 			global $user_rights, $redcap_version,$lang;
-			/*echo "<pre>";
+			echo "<pre>";
 			print_r($user_rights);
-			echo "</pre>";*/
+			echo "</pre>";
 			/*$_SESSION['username'] = 'test_user';
 			$_SESSION['_authsession']['username'] = 'test_user';*/
 			$customRights = $dagAssigns = array();
