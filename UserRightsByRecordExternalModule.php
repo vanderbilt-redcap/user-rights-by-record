@@ -15,9 +15,9 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 	function hook_every_page_before_render($project_id) {
 		if ($project_id != "") {
 			global $user_rights, $redcap_version,$lang;
-			echo "<pre>";
+			/*echo "<pre>";
 			print_r($user_rights);
-			echo "</pre>";
+			echo "</pre>";*/
 			/*$_SESSION['username'] = 'test_user';
 			$_SESSION['_authsession']['username'] = 'test_user';*/
 			$customRights = $dagAssigns = array();
@@ -33,10 +33,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 					$dagAssigns = $this->processDAGs($recordData[$event_id][$this->getProjectSetting("dag-field")]);
 				}
 			}
-			echo "DAG Assigns:<br/>";
-            echo "<pre>";
-			print_r($dagAssigns);
-			echo "</pre>";
+
 			/*$newArray = array("2" => array('dag_id' => "8"), "3" => array('role_id' => '58', 'dag_id' => '8'), "4" => array('role_id' => '58', 'dag_id' => '9'), "5" => array('role_id' => '59', 'dag_id' => '9'), "6" => array('role_id' => '', 'dag_id' => '8'));
 			echo json_encode($newArray);*/
 			$redcapDashboardURL = APP_PATH_WEBROOT_FULL . "redcap_v$redcap_version/DataEntry/record_status_dashboard.php?pid=$project_id";
@@ -47,14 +44,12 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                     $dagID = \Records::getRecordGroupId($project_id, $_GET['id']);
 
                     $user_rights = $this->setCustomRights($project_id, $customRights, $_GET['id'], $user_rights);
-                    echo "Current DAG is $dagID<br/>";
+
                     if (in_array($dagID, $dagAssigns)) {
-                        echo "Set $dagID in user rights<br/>";
                         $user_rights['group_id'] = $dagID;
                     }
                     if (($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (($customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0")) || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
-                        echo "Had to redirect<br/>";
-                        //echo "<script>window.location = '" . $redcapDashboardURL . "';</script>";
+                        echo "<script>window.location = '" . $redcapDashboardURL . "';</script>";
                     }
                 } elseif ($actual_link == $redcapDashboardURL) {
                     global $Proj;
