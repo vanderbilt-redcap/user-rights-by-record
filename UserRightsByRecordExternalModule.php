@@ -48,7 +48,8 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                     if (in_array($dagID, $dagAssigns)) {
                         $user_rights['group_id'] = $dagID;
                     }
-                    if (($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (($customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0")) || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
+
+                    if ($this->recordExists($project_id,$_GET['id']) ($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (($customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0")) || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
                         echo "<script>window.location = '" . $redcapDashboardURL . "';</script>";
                     }
                 } elseif ($actual_link == $redcapDashboardURL) {
@@ -424,5 +425,17 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
             if (isset($records[$this_record])) return $arm;
         }
         return '1';
+    }
+
+    // Does the record we're viewing actually exist? Need to let people see these in case of trying to make a new record
+    private static function recordExists($project_id,$record) {
+	    if (is_numeric($project_id)) {
+            $sql = "SELECT record FROM redcap_data WHERE project_id=$project_id AND record=$record LIMIT 1";
+            $q = db_query($sql);
+            if ($q && db_num_rows($q)) {
+                return true;
+            }
+        }
+	    return false;
     }
 }
