@@ -49,7 +49,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                         $user_rights['group_id'] = $dagID;
                     }
 
-                    if ($this->recordExists($project_id,$_GET['id']) ($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (($customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0")) || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
+                    if ($this->recordExists($project_id,$_GET['id']) && ($_GET['page'] != "" && $_GET['page'] != 'configure' && $_GET['page'] != 'ajax_user') && (($customRights[$_GET['id']]['role'] != "" && (!isset($user_rights['forms'][$_GET['page']]) || $user_rights['forms'][$_GET['page']] === "0")) || ($user_rights['group_id'] !== $dagID && $user_rights['group_id'] !== ""))) {
                         echo "<script>window.location = '" . $redcapDashboardURL . "';</script>";
                     }
                 } elseif ($actual_link == $redcapDashboardURL) {
