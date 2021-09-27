@@ -48,12 +48,14 @@ if ($projectID != "") {
     }
 
 	//$rightsModule = new \Vanderbilt\UserRightsByRecordExternalModule\UserRightsByRecordExternalModule($projectID);
-
+    $postSelectGroup = htmlentities($_POST['select_group'], ENT_QUOTES);
+    $postNewGroup = htmlentities($_POST['new_group'], ENT_QUOTES);
+	
 	echo "<table class='table table-bordered'><tr><th>Select a User to Apply Rights</th></tr>
     <form action='".$module->getUrl('configure.php')."' method='POST'>
         <tr><td>
             <input type='radio' id='user_radio' name='assign_type' ".($_POST['assign_type'] == "individual" || $_POST['assign_type'] == "" ? "checked": "")." value='individual' onclick='showHide(\"user_div\",this,\"individual\",\"group_div\");'>Individual User
-            <input type='radio' id='group_radio' name='assign_type' ".($_POST['assign_type'] == "multiple" || $_POST['select_group'] != "" ? "checked" : "")." value='multiple' onclick='showHide(\"group_div\",this,\"multiple\",\"user_div\");'>Multiple Users
+            <input type='radio' id='group_radio' name='assign_type' ".($_POST['assign_type'] == "multiple" || $postSelectGroup != "" ? "checked" : "")." value='multiple' onclick='showHide(\"group_div\",this,\"multiple\",\"user_div\");'>Multiple Users
         </td></tr><tr><td>
         <div id='user_div' ".($_POST['assign_type'] != "individual" && $_POST['assign_type'] != "" ? "style='display:none;'": "").">
         <select name='select_user'>";
@@ -69,11 +71,11 @@ if ($projectID != "") {
 		        <option value='new'>New Group</option>";
 	        $groupCount = 0;
 	        foreach ($groupList as $groupName) {
-	            echo "<option value='$groupName' ".(db_real_escape_string($_POST['select_group']) == $groupName || db_real_escape_string($_POST['new_group']) == $groupName ? "selected" : "").">$groupName</option>";
+	            echo "<option value='$groupName' ".(db_real_escape_string($postSelectGroup) == $groupName || db_real_escape_string($postNewGroup) == $groupName ? "selected" : "").">$groupName</option>";
 	            $groupCount++;
             }
-            if ($_POST['new_group'] != "") {
-				echo "<option value='".db_real_escape_string($_POST['new_group'])."' selected>".db_real_escape_string($_POST['new_group'])."</option>";
+            if ($postNewGroup != "") {
+				echo "<option value='".db_real_escape_string($postNewGroup)."' selected>".db_real_escape_string($postNewGroup)."</option>";
             }
             echo "</select>
             <input type='text' id='new_group' name='new_group' style='display:none;'/>
@@ -119,11 +121,11 @@ if ($projectID != "") {
         }
 
 		$groupAssign = "";
-		if ($_POST['select_group'] != "" && $_POST['select_group'] != "new") {
-			$groupAssign = db_real_escape_string($_POST['select_group']);
+		if ($postSelectGroup != "" && $postSelectGroup != "new") {
+			$groupAssign = db_real_escape_string($postSelectGroup);
 		}
-		elseif ($_POST['new_group'] != "") {
-			$groupAssign = db_real_escape_string($_POST['new_group']);
+		elseif ($postNewGroup != "") {
+			$groupAssign = db_real_escape_string($postNewGroup);
 		}
 
 	    $json_encoder = json_encode($postArray);
@@ -207,14 +209,14 @@ if ($projectID != "") {
              </script>";
         }
 	}
-	elseif (isset($_POST['load_group']) && $_POST['select_group'] != "") {
+	elseif (isset($_POST['load_group']) && $postSelectGroup != "") {
 	    $usersGroup = array();
-	    if ($_POST['new_group'] != "") {
-	        $postGroup = db_real_escape_string($_POST['new_group']);
+	    if ($postNewGroup != "") {
+	        $postGroup = db_real_escape_string($postNewGroup);
         }
         else {
-	        $postGroup = $_POST['select_group'];
-			$postGroupData = \REDCap::getData($userProjectID, 'array', "", array(), $event_id, array(), false, false, false, "([" . $module->getProjectSetting('project-field') . "] = '$projectID' and [" . $module->getProjectSetting('group-field') . "] = '".db_real_escape_string($_POST['select_group'])."')");
+	        $postGroup = $postSelectGroup;
+			$postGroupData = \REDCap::getData($userProjectID, 'array', "", array(), $event_id, array(), false, false, false, "([" . $module->getProjectSetting('project-field') . "] = '$projectID' and [" . $module->getProjectSetting('group-field') . "] = '".db_real_escape_string($postSelectGroup)."')");
 			foreach ($postGroupData as $recordID => $recordData) {
 				$customRights = json_decode($recordData[$event_id][$module->getProjectSetting("access-field")],true);
 				$dagAssigns = $recordData[$event_id][$module->getProjectSetting("dag-field")];
@@ -223,7 +225,7 @@ if ($projectID != "") {
         }
 
         $userList = array_merge(array_flip($usersGroup),$userList);
-	    $hiddenFields = array('new_group'=>$_POST['new_group'],'select_group'=>($_POST['select_group'] != "" ? $_POST['select_group'] : $_POST['new_group']));
+	    $hiddenFields = array('new_group'=>$postNewGroup,'select_group'=>($postSelectGroup != "" ? $postSelectGroup : $postNewGroup));
 	    drawRightsTables($dagList,$roleList,$userList,$hiddenFields,$module->getUrl('configure.php'),$usersGroup);
 		/*echo "<script type='text/javascript'>
 		var roles = \"";
@@ -240,8 +242,8 @@ if ($projectID != "") {
 
 		echo "<form action='".$module->getUrl('configure.php')."' method='POST'>
 		<table id='table-tr' class='table table-bordered' style='width:100%;font-weight:normal;'>
-		    <input type='hidden' value='".$_POST['new_group']."' name='new_group' />
-		    <input type='hidden' value='".($_POST['select_group'] != "" ? $_POST['select_group'] : $_POST['new_group'])."' name='select_group' />";
+		    <input type='hidden' value='".$postNewGroup."' name='new_group' />
+		    <input type='hidden' value='".($postSelectGroup != "" ? $postSelectGroup : $postNewGroup)."' name='select_group' />";
 		$userCount = 0;
 		echo "<tr>";
 		    foreach ($userList as $userName => $realName) {
