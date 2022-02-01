@@ -371,12 +371,12 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		return $returnArray;
 	}
 
-	function redcap_module_link_check_display($project_id, $link) {
+	/*function redcap_module_link_check_display($project_id, $link) {
 		if(\REDCap::getUserRights(USERID)[USERID]['design'] == '1'){
 			return $link;
 		}
 		return null;
-	}
+	}*/
 
 	function getUserList($project_id) {
 		$userlist = array();

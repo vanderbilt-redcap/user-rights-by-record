@@ -15,8 +15,7 @@
 
   "permissions": [
     "hook_every_page_before_render",
-    "select_data",
-    "redcap_module_link_check_display"
+    "select_data"
   ],
 
   "links": {
