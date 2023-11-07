@@ -343,7 +343,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		//return $completeStatuses;
 	}
 
-    function getDataTable(){
+    function getDataTable($project_id){
         return method_exists('\REDCap', 'getDataTable') ? \REDCap::getDataTable($project_id) : "redcap_data"; 
     }
 
