@@ -348,7 +348,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
     }
 
 	public function getAutoId($project_id) {
-		$table = $this->getDataTable();
+		$table = $this->getDataTable($project_id);
 		$sql = "SELECT MAX(CAST(record as UNSIGNED))
 				FROM $table
 				WHERE project_id=$project_id";
@@ -360,7 +360,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 
 	public function getFormStatus($project_id,$record_id) {
 		$returnArray = array();
-		$table = $this->getDataTable();
+		$table = $this->getDataTable($project_id);
 		$sql = "SELECT d2.event_id,d2.field_name,d2.value,d.form_name
 				FROM redcap_metadata d
 				JOIN $table d2
@@ -435,7 +435,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
     // Does the record we're viewing actually exist? Need to let people see these in case of trying to make a new record
     private static function recordExists($project_id,$record) {
 	    if (is_numeric($project_id)) {
-            $table = $this->getDataTable();
+            $table = $this->getDataTable($project_id);
             $sql = "SELECT record FROM $table WHERE project_id=$project_id AND record=$record LIMIT 1";
             $q = db_query($sql);
             if ($q && db_num_rows($q)) {

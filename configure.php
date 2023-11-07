@@ -381,7 +381,7 @@ function getRoleList($project_id) {
 function getRecordList($project_id,$recordField) {
     global $module;
     $recordList = array();
-    $table = $module->getDataTable();
+    $table = $module->getDataTable($project_id);
     $sql = "SELECT DISTINCT(record)
         FROM $table
         WHERE project_id=$project_id";
