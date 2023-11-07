@@ -381,8 +381,9 @@ function getRoleList($project_id) {
 function getRecordList($project_id,$recordField) {
     global $module;
     $recordList = array();
+    $table = $module->getDataTable();
     $sql = "SELECT DISTINCT(record)
-        FROM redcap_data
+        FROM $table
         WHERE project_id=$project_id";
 	$result = $module->query($sql);
 	//$resultCount = 0;
