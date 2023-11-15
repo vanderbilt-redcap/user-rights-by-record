@@ -433,7 +433,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
     }
 
     // Does the record we're viewing actually exist? Need to let people see these in case of trying to make a new record
-    private static function recordExists($project_id,$record) {
+    private function recordExists($project_id,$record) {
 	    if (is_numeric($project_id)) {
             $table = $this->getDataTable($project_id);
             $sql = "SELECT record FROM $table WHERE project_id=$project_id AND record=$record LIMIT 1";
