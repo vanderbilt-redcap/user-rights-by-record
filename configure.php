@@ -342,9 +342,9 @@ function getUserList($project_id) {
 		FROM redcap_user_rights d
 		JOIN redcap_user_information d2
 			ON d.username = d2.username
-		WHERE d.project_id=$project_id
+		WHERE d.project_id=?
 		ORDER BY name";
-	$result = $module->query($sql);
+	$result = $module->query($sql,[$module->escape($project_id)]);
 	while ($row = db_fetch_assoc($result)) {
 		$userlist[$row['username']] = $row['name'];
 	}
@@ -356,9 +356,9 @@ function getDAGList($project_id) {
 	$dagList = array();
 	$sql = "SELECT group_id, group_name
 		FROM redcap_data_access_groups
-		WHERE project_id=$project_id
+		WHERE project_id=?
 		ORDER BY group_name";
-	$result = $module->query($sql);
+	$result = $module->query($sql,[$module->escape($project_id)]);
 	while ($row = db_fetch_assoc($result)) {
 		$dagList[$row['group_id']] = $row['group_name'];
 	}
@@ -370,8 +370,8 @@ function getRoleList($project_id) {
 	$roleList = array();
 	$sql = "SELECT role_id, role_name
 		FROM redcap_user_roles
-		WHERE project_id=$project_id";
-	$result = $module->query($sql);
+		WHERE project_id=?";
+	$result = $module->query($sql,$module->escape($project_id));
 	while ($row = db_fetch_assoc($result)) {
 		$roleList[$row['role_id']] = $row['role_name'];
 	}
@@ -384,8 +384,8 @@ function getRecordList($project_id,$recordField) {
     $table = $module->getDataTable($project_id);
     $sql = "SELECT DISTINCT(record)
         FROM $table
-        WHERE project_id=$project_id";
-	$result = $module->query($sql);
+        WHERE project_id=?";
+	$result = $module->query($sql,[$module->escape($project_id)]);
 	//$resultCount = 0;
 	while ($row = db_fetch_assoc($result)) {
 		$recordList[$row['record']] = $row['record'];
