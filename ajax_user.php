@@ -11,7 +11,7 @@ $assignType = $_GET['assign_type'];
 $users = "";
 if ($projectID != "") {
 	if ($assignType == "individual") {
-		$users = json_encode($module->getUserList($projectID));
+		$users = json_encode($module->escape($module->getUserList($projectID)));
 	}
 	elseif ($assignType == "multiple") {
 		$userProjectID = $module->getRightsProjectID();

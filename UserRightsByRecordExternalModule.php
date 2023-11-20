@@ -365,11 +365,11 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 				FROM redcap_metadata d
 				JOIN $table d2
 					ON d.field_name=d2.field_name AND d.project_id=d2.project_id
-				WHERE d.project_id=$project_id
-				AND d2.record='$record_id'
+				WHERE d.project_id=?
+				AND d2.record=?
 				AND d.field_name LIKE '%_complete'";
 		//echo "$sql<br/>";
-		$result = $this->query($sql);
+		$result = $this->query($sql, [$project_id, $record_id]);
 		while ($row = db_fetch_assoc($result)) {
 			$returnArray[$row['event_id']][$row['form_name']][] = $row['value'];
 		}
@@ -389,8 +389,8 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		FROM redcap_user_rights d
 		JOIN redcap_user_information d2
 			ON d.username = d2.username
-		WHERE d.project_id=$project_id";
-		$result = $this->query($sql);
+		WHERE d.project_id=?";
+		$result = $this->query($sql, [$project_id]);
 		while ($row = db_fetch_assoc($result)) {
 			$userlist[$row['username']] = $row['name'];
 		}
@@ -436,12 +436,16 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
     private function recordExists($project_id,$record) {
 	    if (is_numeric($project_id)) {
             $table = $this->getDataTable($project_id);
-            $sql = "SELECT record FROM $table WHERE project_id=$project_id AND record=$record LIMIT 1";
-            $q = db_query($sql);
+            $sql = "SELECT record FROM $table WHERE project_id=? AND record=? LIMIT 1";
+            $q = db_query($sql, [$project_id, $record]);
             if ($q && db_num_rows($q)) {
                 return true;
             }
         }
 	    return false;
+    }
+
+    function escape($arg){
+        return $this->framework->escape($arg);
     }
 }
