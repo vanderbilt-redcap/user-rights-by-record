@@ -238,10 +238,10 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		if (!is_numeric($role_id) || !is_numeric($role_id)) return $formAccess;
 		$sql = "SELECT data_entry
 			FROM redcap_user_roles
-			WHERE project_id=".$project_id."
-			AND role_id=".$role_id;
+			WHERE project_id=?
+			AND role_id=?";
 		//echo "$sql<br/>";
-		$roleForms = db_result($this->query($sql),0);
+		$roleForms = db_result($this->query($sql,[$project_id,$role_id]),0);
 		$roleForms = ltrim($roleForms,"[");
 		$roleForms = rtrim($roleForms,"]");
 		$formArray = array();
@@ -351,9 +351,9 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
 		$table = $this->getDataTable($project_id);
 		$sql = "SELECT MAX(CAST(record as UNSIGNED))
 				FROM $table
-				WHERE project_id=$project_id";
+				WHERE project_id=?";
 		//echo "$sql<br/>";
-		$highestRecord = db_result($this->query($sql),0);
+		$highestRecord = db_result($this->query($sql,[$project_id]),0);
 		$highestRecord++;
 		return $highestRecord;
 	}
