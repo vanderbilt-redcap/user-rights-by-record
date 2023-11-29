@@ -1,3 +1,5 @@
+<?php namespace Vanderbilt\UserRightsByRecordExternalModule; ?>
+
 <style type='text/css'>
     .picklist {
         width:90%;
@@ -26,7 +28,7 @@ if ($projectID != "") {
 	require_once APP_PATH_DOCROOT . 'ProjectGeneral/header.php';
 	/*$HtmlPage = new HtmlPage();
 	$HtmlPage->PrintHeaderExt();*/
-	$userList = getUserList($projectID);
+	$userList = $module->escape(getUserList($projectID));
 
 	$dagList = getDAGList($projectID);
 	$roleList = getRoleList($projectID);
@@ -71,6 +73,7 @@ if ($projectID != "") {
 		        <option value='new'>New Group</option>";
 	        $groupCount = 0;
 	        foreach ($groupList as $groupName) {
+	            $groupName = $module->escape($groupName);
 	            echo "<option value='$groupName' ".(db_real_escape_string($postSelectGroup) == $groupName || db_real_escape_string($postNewGroup) == $groupName ? "selected" : "").">$groupName</option>";
 	            $groupCount++;
             }
@@ -269,6 +272,10 @@ if ($projectID != "") {
 
 function drawRightsTables($dagList,$roleList,$userList,$hiddenFields,$destination,$usersGroup = array())
 {
+	global $module;
+	$dagList = $module->escape($dagList);
+	$roleList = $module->escape($roleList);
+
 	echo "<script type='text/javascript'>
 		var roles = \"";
 	foreach ($roleList as $roleType => $roleData) {
@@ -342,9 +349,9 @@ function getUserList($project_id) {
 		FROM redcap_user_rights d
 		JOIN redcap_user_information d2
 			ON d.username = d2.username
-		WHERE d.project_id=$project_id
+		WHERE d.project_id=?
 		ORDER BY name";
-	$result = $module->query($sql);
+	$result = $module->query($sql, [$project_id]);
 	while ($row = db_fetch_assoc($result)) {
 		$userlist[$row['username']] = $row['name'];
 	}
@@ -356,9 +363,9 @@ function getDAGList($project_id) {
 	$dagList = array();
 	$sql = "SELECT group_id, group_name
 		FROM redcap_data_access_groups
-		WHERE project_id=$project_id
+		WHERE project_id=?
 		ORDER BY group_name";
-	$result = $module->query($sql);
+	$result = $module->query($sql, [$project_id]);
 	while ($row = db_fetch_assoc($result)) {
 		$dagList[$row['group_id']] = $row['group_name'];
 	}
@@ -370,8 +377,8 @@ function getRoleList($project_id) {
 	$roleList = array();
 	$sql = "SELECT role_id, role_name
 		FROM redcap_user_roles
-		WHERE project_id=$project_id";
-	$result = $module->query($sql);
+		WHERE project_id=?";
+	$result = $module->query($sql, [$project_id]);
 	while ($row = db_fetch_assoc($result)) {
 		$roleList[$row['role_id']] = $row['role_name'];
 	}
@@ -384,8 +391,8 @@ function getRecordList($project_id,$recordField) {
     $table = $module->getDataTable($project_id);
     $sql = "SELECT DISTINCT(record)
         FROM $table
-        WHERE project_id=$project_id";
-	$result = $module->query($sql);
+        WHERE project_id=?";
+	$result = $module->query($sql, [$project_id]);
 	//$resultCount = 0;
 	while ($row = db_fetch_assoc($result)) {
 		$recordList[$row['record']] = $row['record'];
@@ -440,6 +447,7 @@ function generatePrefill($data,$dags) {
                 $count = 0;
 
 				foreach ($recordList as $recordType => $recordData) {
+					$recordData = $module->escape($recordData);
 				    if ($count % 2 == 0) {
 				        $tableHTML .= "<tr>";
                     }
