@@ -13,7 +13,7 @@ use ExternalModules\ExternalModules;
 class UserRightsByRecordExternalModule extends AbstractExternalModule
 {
 	function hook_every_page_before_render($project_id) {
-		if ($project_id != "" && defined(USERID) && defined(APP_PATH_WEBROOT_FULL) && DEFINED(SUPER_USER) && defined(APP_PATH_WEBROOT) && defined(APP_PATH_IMAGES) && defined(PROJECT_ID)) {
+		if ($project_id != "" && defined('USERID') && defined('APP_PATH_WEBROOT_FULL') && defined('SUPER_USER') && defined('APP_PATH_WEBROOT') && defined('APP_PATH_IMAGES')) {
 			global $user_rights, $redcap_version,$lang;
 			/*echo "<pre>";
 			print_r($user_rights);
