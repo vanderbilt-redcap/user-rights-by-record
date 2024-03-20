@@ -13,7 +13,7 @@ use ExternalModules\ExternalModules;
 class UserRightsByRecordExternalModule extends AbstractExternalModule
 {
 	function hook_every_page_before_render($project_id) {
-		if ($project_id != "") {
+		if ($project_id != "" && defined(USERID) && defined(APP_PATH_WEBROOT_FULL) && DEFINED(SUPER_USER) && defined(APP_PATH_WEBROOT) && defined(APP_PATH_IMAGES) && defined(PROJECT_ID)) {
 			global $user_rights, $redcap_version,$lang;
 			/*echo "<pre>";
 			print_r($user_rights);
@@ -408,7 +408,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
         // If we're showing the default dashboard, then return default array
         if (empty($rd_id)) return $dashboard;
         // Get the dashboard
-        $sql = "select * from redcap_record_dashboards where rd_id = $rd_id and project_id = ".PROJECT_ID;
+        $sql = "select * from redcap_record_dashboards where rd_id = $rd_id and project_id = ".$Proj->project_id;
         $q = db_query($sql);
         if ($q && db_num_rows($q)) {
             // Overlay values from table
