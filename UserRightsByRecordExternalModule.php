@@ -176,7 +176,7 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                                 $statusIconStyle = ($form_has_multiple_instances) ? 'width:22px;' : 'width:16px;margin-right:6px;';
 
                                 $addRptBtn = '';
-                                $highest_instance = max(array_keys($recordData[$event_id][$formName]));
+                                $highest_instance = max(array_keys($recordData[$eventID][$formName]));
                                 if (empty($highest_instance)) $highest_instance = '1';
                                 if ($Proj->isRepeatingForm($eventID, $formName)) {
                                     // Get next instance number
