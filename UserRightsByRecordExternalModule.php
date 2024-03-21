@@ -172,11 +172,11 @@ class UserRightsByRecordExternalModule extends AbstractExternalModule
                         $rowclass = "even";
                         foreach ($formsByEvent as $eventID => $eventForms) {
                             foreach ($eventForms as $formName) {
-                                $form_has_multiple_instances = (count($recordData[$eventID][$formName]) > 1);
+                                $form_has_multiple_instances = (count($recordData[$eventID][$formName] ?? []) > 1);
                                 $statusIconStyle = ($form_has_multiple_instances) ? 'width:22px;' : 'width:16px;margin-right:6px;';
 
                                 $addRptBtn = '';
-                                $highest_instance = max(array_keys($recordData[$eventID][$formName]));
+                                $highest_instance = max(array_keys($recordData[$eventID][$formName] ?? [null]));
                                 if (empty($highest_instance)) $highest_instance = '1';
                                 if ($Proj->isRepeatingForm($eventID, $formName)) {
                                     // Get next instance number
